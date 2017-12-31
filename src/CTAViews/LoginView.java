@@ -19,7 +19,7 @@ public class LoginView extends View{
         Button submit = new Button();
 
         VBox layout = new VBox(20);
-        layout.getChildren().addAll(username,apiKey);
+        layout.getChildren().addAll(username,apiKey, submit);
         layout.setAlignment(Pos.CENTER);
         scene = new Scene(layout, 800, 600);
 

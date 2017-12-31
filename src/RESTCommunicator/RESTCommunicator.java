@@ -36,6 +36,10 @@ public class RESTCommunicator {
             return null;
         }
     }
+//
+//    public static int login(){
+//
+//    }
 
     public static String post(String url, String payload, int timeout, String apiKey) {
         return send(url+"?api_key="+apiKey, "POST", payload, timeout);
