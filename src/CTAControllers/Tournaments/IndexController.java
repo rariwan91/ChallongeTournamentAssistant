@@ -96,10 +96,12 @@ public class IndexController extends ChallongeController implements Initializabl
                 @Override
                 public void handle(ActionEvent event) {
                     try {
-                        String fullButtonId = button.getId();
-                        String[] splitId = fullButtonId.split(",", 2);
-                        String urlName = splitId[0];
-                        String name = splitId[1];
+                        String buttonId = button.getId();
+                        int index = Integer.parseInt(buttonId);
+                        Tournament selectedTournament = tournamentsListView.getItems().get(index);
+
+                        String urlName = selectedTournament.getTournament().getUrl();
+                        String name = selectedTournament.getTournament().getName();
                         loadSpecificTournament(button, name, urlName);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -119,7 +121,9 @@ public class IndexController extends ChallongeController implements Initializabl
                 lastItem = item;
                 label.setText(item.getTournament().getName());
 
-                String buttonId = item.getTournament().getUrl() + "," + item.getTournament().getName();
+                int tournamentIndex = tournamentsListView.getItems().indexOf(item);
+
+                String buttonId = Integer.toString(tournamentIndex);
                 button.setId(buttonId);
                 setGraphic(hbox);
             }

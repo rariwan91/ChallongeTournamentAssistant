@@ -41,7 +41,7 @@ public class LoginController extends ChallongeController {
         }
 
         if (apiKeyTextField.getText().trim().isEmpty()) {
-            errorText += " API Key required.";
+            errorText += "API Key required.";
 
             errorLabel.setText(errorText);
             errorLabel.setVisible(true);
