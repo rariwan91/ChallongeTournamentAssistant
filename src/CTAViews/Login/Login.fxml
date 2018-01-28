@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8.0.121" fx:controller="CTAControllers.Login.LoginController">
+    <Label layoutX="137.0" layoutY="131.0" text="Username:"/>
+    <TextField fx:id="usernameTextField" layoutX="240.0" layoutY="126.0" promptText="Username"/>
+    <Label layoutX="152.0" layoutY="168.0" text="API Key:"/>
+    <PasswordField fx:id="apiKeyTextField" layoutX="240.0" layoutY="163.0" promptText="API Key"/>
+    <Button fx:id="loginButton" layoutX="271.0" layoutY="227.0" mnemonicParsing="false"
+            onAction="#handleLoginButtonAction" text="Login"/>
+    <Label fx:id="errorLabel" layoutX="280.0" layoutY="280.0" text="Label" visible="false"/>
+</AnchorPane>

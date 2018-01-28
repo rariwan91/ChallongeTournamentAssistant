@@ -4,6 +4,11 @@ public class UserModel {
     private String apiKey;
     private String username;
 
+    public UserModel(String username, String apiKey) {
+        this.username = username;
+        this.apiKey = apiKey;
+    }
+
     public void setApiKey(String key){
         this.apiKey = key;
     }
