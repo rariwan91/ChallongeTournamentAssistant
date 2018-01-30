@@ -1,9 +1,9 @@
 package Repositories;
 
+import CTAModels.ChallongeApiResponse;
 import CTAModels.Tournaments.Tournament;
-import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.HttpRequest;
 
 public class TournamentRepository extends BaseRepository {
     private final String BASE_URL = super.BASE_URL + "tournaments";
@@ -12,36 +12,19 @@ public class TournamentRepository extends BaseRepository {
         super(username, apiKey);
     }
 
-    public Tournament[] index() {
-        try {
-            HttpResponse<Tournament[]> response = Unirest.get(BASE_URL + ".json").basicAuth(username, apiKey)
-                    .asObject(Tournament[].class);
-            return response.getBody();
-        } catch (UnirestException e) {
-            return new Tournament[0];
-        }
+    public ChallongeApiResponse<Tournament[]> index() {
+        // if responseStatus is GOOD then we can return the Tournament[]
+        // else we need to somehow return the error message
+
+        HttpRequest request = Unirest.get(BASE_URL + ".json")
+                .basicAuth(username, apiKey);
+
+        return new ChallongeApiResponse<>(request, Tournament[].class);
     }
 
-    public Tournament show(String tournamentName) {
-        try {
-            HttpResponse<Tournament> response = Unirest.get(BASE_URL + "/" + tournamentName + ".json").basicAuth(username, apiKey)
-                    .asObject(Tournament.class);
-            return response.getBody();
-        } catch (UnirestException e) {
-            return null;
-        }
+    public ChallongeApiResponse<Tournament> show(String tournamentName) {
+        HttpRequest request = Unirest.get(BASE_URL + "/" + tournamentName + ".json")
+                .basicAuth(username, apiKey);
+        return new ChallongeApiResponse<>(request, Tournament.class);
     }
-
-    // No UI currently hooked up to look up a tournament by its id number
-    // so I'm leaving it commented out for now.
-//    public Tournament show(int tournamentId) {
-//        try {
-//            HttpResponse<Tournament> response = Unirest.get(BASE_URL + "/" + tournamentId + ".json").basicAuth(username, apiKey)
-//                    .asObject(Tournament.class);
-//            Tournament result = response.getBody();
-//            return result;
-//        } catch (UnirestException e) {
-//            return null;
-//        }
-//    }
 }

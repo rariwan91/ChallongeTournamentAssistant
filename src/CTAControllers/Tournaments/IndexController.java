@@ -1,13 +1,13 @@
 package CTAControllers.Tournaments;
 
 import CTAControllers.ChallongeController;
+import CTAModels.ChallongeApiResponse;
 import CTAModels.Tournaments.Tournament;
 import CTAModels.UserModel;
 import Constants.ViewConstants;
 import Repositories.TournamentRepository;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,16 +45,10 @@ public class IndexController extends ChallongeController implements Initializabl
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TournamentRepository repository = new TournamentRepository(userModel.getUsername(), userModel.getApiKey());
-        Tournament[] tournaments = repository.index();
+        ChallongeApiResponse<Tournament[]> response = repository.index();
 
-        tournamentsListView.setItems(FXCollections.observableArrayList(tournaments));
-        tournamentsListView.setCellFactory(new Callback<ListView<Tournament>, ListCell<Tournament>>() {
-
-            @Override
-            public ListCell<Tournament> call(ListView<Tournament> p) {
-                return new TournamentCell();
-            }
-        });
+        tournamentsListView.setItems(FXCollections.observableArrayList(response.value()));
+        tournamentsListView.setCellFactory(p -> new TournamentCell());
     }
 
     @FXML
@@ -71,7 +64,7 @@ public class IndexController extends ChallongeController implements Initializabl
         loader.setController(controller);
 
         Stage stage = (Stage) button.getScene().getWindow();
-        stage.setScene(new Scene((Pane) loader.load()));
+        stage.setScene(new Scene(loader.load()));
 
         stage.show();
     }
@@ -92,20 +85,17 @@ public class IndexController extends ChallongeController implements Initializabl
             super();
             hbox.getChildren().addAll(label, pane, button);
             HBox.setHgrow(pane, Priority.ALWAYS);
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        String buttonId = button.getId();
-                        int index = Integer.parseInt(buttonId);
-                        Tournament selectedTournament = tournamentsListView.getItems().get(index);
+            button.setOnAction(event -> {
+                try {
+                    String buttonId = button.getId();
+                    int index = Integer.parseInt(buttonId);
+                    Tournament selectedTournament = tournamentsListView.getItems().get(index);
 
-                        String urlName = selectedTournament.getTournament().getUrl();
-                        String name = selectedTournament.getTournament().getName();
-                        loadSpecificTournament(button, name, urlName);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    String urlName = selectedTournament.getTournament().getUrl();
+                    String name = selectedTournament.getTournament().getName();
+                    loadSpecificTournament(button, name, urlName);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
         }
