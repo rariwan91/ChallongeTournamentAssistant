@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ public class MainMenuController extends ChallongeController {
         loader.setController(controller);
 
         Stage stage = (Stage) indexButton.getScene().getWindow();
-        stage.setScene(new Scene((Pane) loader.load()));
+        stage.setScene(new Scene(loader.load()));
 
         stage.show();
     }

@@ -3,6 +3,7 @@ package CTAControllers.Login;
 import CTAControllers.ChallongeController;
 import CTAModels.UserModel;
 import Constants.ViewConstants;
+import Repositories.LoginRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -49,11 +50,23 @@ public class LoginController extends ChallongeController {
             return;
         }
 
-        errorLabel.setText("");
-        errorLabel.setVisible(false);
-
         String username = usernameTextField.getText();
         String apiKey = apiKeyTextField.getText();
+
+        LoginRepository loginRepository = new LoginRepository(username, apiKey);
+
+        if (!loginRepository.testCredentials()) {
+            errorText += "Problem with username or API Key";
+
+            errorLabel.setText(errorText);
+            errorLabel.setVisible(true);
+            apiKeyTextField.setText("");
+
+            return;
+        }
+
+        errorLabel.setText("");
+        errorLabel.setVisible(false);
 
         setUserModel(new UserModel(username, apiKey));
         Stage stage = (Stage) loginButton.getScene().getWindow();

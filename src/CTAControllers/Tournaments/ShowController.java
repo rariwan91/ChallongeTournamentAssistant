@@ -1,6 +1,7 @@
 package CTAControllers.Tournaments;
 
 import CTAControllers.ChallongeController;
+import CTAModels.ChallongeApiResponse;
 import CTAModels.Tournaments.Tournament;
 import CTAModels.UserModel;
 import Constants.ViewConstants;
@@ -15,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -51,10 +51,10 @@ public class ShowController extends ChallongeController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TournamentRepository repository = new TournamentRepository(userModel.getUsername(), userModel.getApiKey());
-        Tournament tournament = repository.show(tournamentUrlName);
+        ChallongeApiResponse<Tournament> response = repository.show(tournamentUrlName);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(tournament);
+        String json = gson.toJson(response.value());
 
         tournamentTextField.setText(json);
         tournamentLabel.setText(tournamentLabel.getText() + " " + tournamentName);
@@ -68,7 +68,7 @@ public class ShowController extends ChallongeController implements Initializable
         loader.setController(controller);
 
         Stage stage = (Stage) backButton.getScene().getWindow();
-        stage.setScene(new Scene((Pane) loader.load()));
+        stage.setScene(new Scene(loader.load()));
 
         stage.show();
     }
