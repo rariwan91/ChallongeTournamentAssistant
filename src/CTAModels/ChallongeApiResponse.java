@@ -12,16 +12,15 @@ public class ChallongeApiResponse<T> {
     private int responseStatus;
     private String[] errors;
 
-    public ChallongeApiResponse(HttpRequest request, Class responseClass) {
+    public ChallongeApiResponse(HttpRequest request, Class<T> responseClass) {
         try {
-            HttpResponse<String> initialResponse = request.asString();
-            responseStatus = initialResponse.getStatus();
+            HttpResponse<String> response = request.asString();
+            responseStatus = response.getStatus();
 
             if (isValid()) {
-                HttpResponse<T> finalResponse = request.asObject(responseClass);
-                value = finalResponse.getBody();
+                value = new Gson().fromJson(response.getBody(), responseClass);
             } else if (responseStatus == ResponseConstants.RESPONSE_VALIDATION_ERROR) {
-                errors = new Gson().fromJson(initialResponse.getBody(), String[].class);
+                errors = new Gson().fromJson(response.getBody(), String[].class);
             }
         } catch (UnirestException e) {
             e.printStackTrace();
